@@ -6,292 +6,60 @@
 <title>Hale Design — Email Signature</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background: #f5f5f5;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-  }
-
-  .page-wrapper {
-    width: 100%;
-    max-width: 700px;
-  }
-
-  .header {
-    background: #fff;
-    border-radius: 12px;
-    padding: 32px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  }
-
-  .header h1 {
-    font-size: 18px;
-    font-weight: 700;
-    color: #231f20;
-    margin-bottom: 4px;
-    letter-spacing: -0.3px;
-  }
-
-  .header p {
-    font-size: 13px;
-    color: #666;
-    line-height: 1.6;
-  }
-
-  .form-wrapper {
-    background: #fff;
-    border-radius: 12px;
-    padding: 32px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  }
-
-  .form-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 20px;
-  }
-
-  .field-group {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .field label {
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #555;
-    letter-spacing: 0.2px;
-  }
-
-  .field input {
-    padding: 10px 14px;
-    border: 1.5px solid #e0e0e0;
-    border-radius: 7px;
-    font-size: 13px;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: #231f20;
-    background: #fafafa;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-    outline: none;
-  }
-
-  .field input:focus {
-    border-color: #231f20;
-    box-shadow: 0 0 0 3px rgba(35,31,32,0.1);
-    background: #fff;
-  }
-
-  .field input::placeholder {
-    color: #bbb;
-  }
-
-  .signature-wrapper {
-    background: #fff;
-    border-radius: 12px;
-    padding: 32px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-  }
-
-  .sig-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 20px;
-  }
-
-  #sig-copy-source {
-    position: absolute;
-    left: -9999px;
-    top: 0;
-  }
-
-  #signature-preview {
-    padding: 20px;
-    background: #fafafa;
-    border: 1px solid #eee;
-    border-radius: 8px;
-  }
-
-  .copy-btn {
-    display: block;
-    width: 100%;
-    margin-top: 20px;
-    padding: 14px;
-    background: #231f20;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    letter-spacing: 0.2px;
-    transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  .copy-btn:hover {
-    background: #3a3536;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.22);
-  }
-
-  .copy-btn:active,
-  .copy-btn.pressing {
-    transform: scale(0.975) translateY(1px);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.18);
-    background: #111;
-  }
-
-  .copy-btn.copied {
-    background: #2a7a4b;
-    transform: scale(1);
-    box-shadow: 0 2px 8px rgba(42,122,75,0.35);
-  }
-
-  .copy-btn.error {
-    background: #c0392b;
-  }
-
-  .helper-note {
-    font-size: 11.5px;
-    color: #aaa;
-    text-align: center;
-    margin-top: 12px;
-    line-height: 1.5;
-  }
-
-  .status-bar {
-    height: 0;
-    overflow: hidden;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.2px;
-    transition: height 0.2s ease, opacity 0.2s ease;
-    opacity: 0;
-    margin-top: 0;
-    border-radius: 6px;
-  }
-
-  .status-bar.show {
-    height: 36px;
-    line-height: 36px;
-    opacity: 1;
-    margin-top: 10px;
-  }
-
-  .status-bar.success {
-    background: #edfaf2;
-    color: #1e6e3e;
-  }
-
-  .status-bar.fail {
-    background: #fff0ef;
-    color: #c0392b;
-  }
-
-  .steps {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 16px;
-  }
-
-  .step {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: 13px;
-    color: #444;
-    line-height: 1.5;
-  }
-
-  .step-num {
-    width: 22px;
-    height: 22px;
-    min-width: 22px;
-    background: #231f20;
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    margin-top: 1px;
-  }
+  body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+  .page-wrapper { width: 100%; max-width: 700px; }
+  .header { background: #fff; border-radius: 12px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .header h1 { font-size: 18px; font-weight: 700; color: #231f20; margin-bottom: 4px; letter-spacing: -0.3px; }
+  .header p { font-size: 13px; color: #666; line-height: 1.6; }
+  .form-wrapper { background: #fff; border-radius: 12px; padding: 32px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .form-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 20px; }
+  .field-group { display: flex; flex-direction: column; gap: 14px; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 11.5px; font-weight: 600; color: #555; letter-spacing: 0.2px; }
+  .field input { padding: 10px 14px; border: 1.5px solid #e0e0e0; border-radius: 7px; font-size: 13px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #231f20; background: #fafafa; transition: border-color 0.15s ease, box-shadow 0.15s ease; outline: none; }
+  .field input:focus { border-color: #231f20; box-shadow: 0 0 0 3px rgba(35,31,32,0.1); background: #fff; }
+  .field input::placeholder { color: #bbb; }
+  .signature-wrapper { background: #fff; border-radius: 12px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .sig-label { font-size: 11px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 20px; }
+  #sig-copy-source { position: absolute; left: -9999px; top: 0; }
+  #signature-preview { padding: 20px; background: #fafafa; border: 1px solid #eee; border-radius: 8px; }
+  .copy-btn { display: block; width: 100%; margin-top: 20px; padding: 14px; background: #231f20; color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; letter-spacing: 0.2px; transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.18); user-select: none; -webkit-user-select: none; }
+  .copy-btn:hover { background: #3a3536; box-shadow: 0 4px 12px rgba(0,0,0,0.22); }
+  .copy-btn:active, .copy-btn.pressing { transform: scale(0.975) translateY(1px); box-shadow: 0 1px 3px rgba(0,0,0,0.18); background: #111; }
+  .copy-btn.copied { background: #2a7a4b; transform: scale(1); box-shadow: 0 2px 8px rgba(42,122,75,0.35); }
+  .copy-btn.error { background: #c0392b; }
+  .helper-note { font-size: 11.5px; color: #aaa; text-align: center; margin-top: 12px; line-height: 1.5; }
+  .status-bar { height: 0; overflow: hidden; text-align: center; font-size: 12px; font-weight: 600; letter-spacing: 0.2px; transition: height 0.2s ease, opacity 0.2s ease; opacity: 0; margin-top: 0; border-radius: 6px; }
+  .status-bar.show { height: 36px; line-height: 36px; opacity: 1; margin-top: 10px; }
+  .status-bar.success { background: #edfaf2; color: #1e6e3e; }
+  .status-bar.fail { background: #fff0ef; color: #c0392b; }
+  .steps { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .step { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: #444; line-height: 1.5; }
+  .step-num { width: 22px; height: 22px; min-width: 22px; background: #231f20; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin-top: 1px; }
 </style>
 </head>
 <body>
-
 <div class="page-wrapper">
 
   <div class="header">
     <h1>Hale Design &mdash; Email Signature</h1>
     <p>Enter your details below. The preview updates live. When it looks right, copy and paste into your email client.</p>
     <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div>Fill in your details below.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div>Click <strong>"Copy Signature"</strong> once the preview looks correct.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div>Go to your email client's <strong>Settings &rarr; Signature</strong> section.</div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div><strong>Paste</strong> into the signature field and save. Done. &#10003;</div>
-      </div>
+      <div class="step"><div class="step-num">1</div><div>Fill in your details below.</div></div>
+      <div class="step"><div class="step-num">2</div><div>Click <strong>"Copy Signature"</strong> once the preview looks correct.</div></div>
+      <div class="step"><div class="step-num">3</div><div>Go to your email client's <strong>Settings &rarr; Signature</strong> section.</div></div>
+      <div class="step"><div class="step-num">4</div><div><strong>Paste</strong> into the signature field and save. Done. &#10003;</div></div>
     </div>
   </div>
 
   <div class="form-wrapper">
     <div class="form-label">Your Details</div>
     <div class="field-group">
-      <div class="field">
-        <label for="input-name">Full Name</label>
-        <input type="text" id="input-name" placeholder="First Last">
-      </div>
-      <div class="field">
-        <label for="input-pronouns">Pronouns</label>
-        <input type="text" id="input-pronouns" placeholder="e.g. she/her">
-      </div>
-      <div class="field">
-        <label for="input-title">Title</label>
-        <input type="text" id="input-title" placeholder="e.g. Creative Director">
-      </div>
-      <div class="field">
-        <label for="input-email">Email Address</label>
-        <input type="email" id="input-email" placeholder="you&#64;hellohaledesign.com">
-      </div>
-      <div class="field">
-        <label for="input-phone">Phone Number</label>
-        <input type="text" id="input-phone" placeholder="555-000-0000">
-      </div>
+      <div class="field"><label for="input-name">Full Name</label><input type="text" id="input-name" placeholder="First Last"></div>
+      <div class="field"><label for="input-pronouns">Pronouns</label><input type="text" id="input-pronouns" placeholder="e.g. she/her"></div>
+      <div class="field"><label for="input-title">Title</label><input type="text" id="input-title" placeholder="e.g. Creative Director"></div>
+      <div class="field"><label for="input-email">Email Address</label><input type="email" id="input-email" placeholder="you&#64;hellohaledesign.com"></div>
+      <div class="field"><label for="input-phone">Phone Number</label><input type="text" id="input-phone" placeholder="555-000-0000"></div>
     </div>
   </div>
 
@@ -301,47 +69,31 @@
     <!-- VISIBLE PREVIEW -->
     <div id="signature-preview">
       <table cellpadding="0" cellspacing="0" border="0" width="480" style="border-collapse:collapse; font-family:Arial,Helvetica,sans-serif; font-size:12px; width:480px;">
-        <!-- DOT DIVIDER -->
         <tr>
           <td width="480" style="padding:0 0 14px 0;">
             <div style="background-image:radial-gradient(circle, #231f20 2px, transparent 2px); background-size:10px 4px; background-repeat:repeat-x; height:4px; width:180px; font-size:0; line-height:0;">&nbsp;</div>
           </td>
         </tr>
-        <!-- NAME + PRONOUNS -->
         <tr>
           <td width="480" style="padding:0 0 1px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:600; color:#231f20; letter-spacing:0.2px; line-height:1.3;">
             <span id="prev-name">First Last</span><span id="prev-pronouns-wrap" style="font-family:Arial,Helvetica,sans-serif; font-weight:400; font-size:11px; color:#231f20;"> &nbsp;<span id="prev-pronouns"></span></span>
           </td>
         </tr>
-        <!-- TITLE -->
-        <tr>
-          <td width="480" id="prev-title" style="padding:0 0 12px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; color:#231f20; line-height:1.4;">Title</td>
-        </tr>
-        <!-- COMPANY -->
-        <tr>
-          <td width="480" style="padding:0 0 1px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:700; color:#231f20; line-height:1.4;">Hale Design</td>
-        </tr>
-        <!-- TAGLINE -->
-        <tr>
-          <td width="480" style="padding:0 0 10px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; font-style:italic; color:#231f20; line-height:1.4;">Strategic. Iconic. Inspired.</td>
-        </tr>
-        <!-- PHONE -->
-        <tr>
-          <td width="480" id="prev-phone" style="padding:0 0 2px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;">555-000-0000</td>
-        </tr>
-        <!-- EMAIL -->
+        <tr><td width="480" id="prev-title" style="padding:0 0 12px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; color:#231f20; line-height:1.4;">Title</td></tr>
+        <tr><td width="480" style="padding:0 0 1px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:700; color:#231f20; line-height:1.4;">Hale Design</td></tr>
+        <tr><td width="480" style="padding:0 0 10px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; font-style:italic; color:#231f20; line-height:1.4;">Strategic. Iconic. Inspired.</td></tr>
+        <tr><td width="480" id="prev-phone" style="padding:0 0 2px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;">555-000-0000</td></tr>
         <tr>
           <td width="480" style="padding:0 0 4px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;">
             <a id="prev-email-link" href="#" style="font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; text-decoration:none;">you&#64;hellohaledesign.com</a>
           </td>
         </tr>
-        <!-- ARROW + URL: image and text inside single <a> tag — cannot be split by Apple Mail -->
+        <!-- ARROW + URL: float:left matches original working v1 technique -->
         <tr>
           <td width="480" style="padding:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;">
-            <a href="https://www.hellohaledesign.com" style="font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; text-decoration:none; white-space:nowrap;"><img src="https://static.wixstatic.com/media/5cb9e8_3645b969b0814b7eb71619f6def4c3b6~mv2.png" alt="" width="12" height="12" style="display:inline; vertical-align:middle; border:0; width:12px; height:12px; margin-right:4px;">hellohaledesign.com</a>
+            <img src="https://static.wixstatic.com/media/5cb9e8_3645b969b0814b7eb71619f6def4c3b6~mv2.png" alt="" width="12" height="12" style="float:left; border:0; width:12px; height:12px; margin-right:2px; margin-top:2px;"><a href="https://www.hellohaledesign.com" style="font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; text-decoration:none;">hellohaledesign.com</a>
           </td>
         </tr>
-        <!-- LOGO -->
         <tr>
           <td width="480" style="padding:0;">
             <a href="https://www.hellohaledesign.com" target="_blank">
@@ -355,47 +107,31 @@
     <!-- OFFSCREEN COPY SOURCE -->
     <div id="sig-copy-source" aria-hidden="true">
       <table cellpadding="0" cellspacing="0" border="0" width="480" style="border-collapse:collapse; font-family:Arial,Helvetica,sans-serif; font-size:12px; width:480px;">
-        <!-- DOT DIVIDER -->
         <tr>
           <td width="480" style="padding:0 0 14px 0;">
             <div style="background-image:radial-gradient(circle, #231f20 2px, transparent 2px); background-size:10px 4px; background-repeat:repeat-x; height:4px; width:180px; font-size:0; line-height:0;">&nbsp;</div>
           </td>
         </tr>
-        <!-- NAME + PRONOUNS -->
         <tr>
           <td width="480" style="padding:0 0 1px 0; font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:600; color:#231f20; letter-spacing:0.2px; line-height:1.3;">
             <span id="copy-name">First Last</span><span id="copy-pronouns-wrap" style="font-family:Arial,Helvetica,sans-serif; font-weight:400; font-size:11px; color:#231f20;"> &nbsp;<span id="copy-pronouns"></span></span>
           </td>
         </tr>
-        <!-- TITLE -->
-        <tr>
-          <td width="480" id="copy-title" style="padding:0 0 12px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; color:#231f20; line-height:1.4;">Title</td>
-        </tr>
-        <!-- COMPANY -->
-        <tr>
-          <td width="480" style="padding:0 0 1px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:700; color:#231f20; line-height:1.4;">Hale Design</td>
-        </tr>
-        <!-- TAGLINE -->
-        <tr>
-          <td width="480" style="padding:0 0 10px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; font-style:italic; color:#231f20; line-height:1.4;">Strategic. Iconic. Inspired.</td>
-        </tr>
-        <!-- PHONE -->
-        <tr>
-          <td width="480" id="copy-phone" style="padding:0 0 2px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;">555-000-0000</td>
-        </tr>
-        <!-- EMAIL -->
+        <tr><td width="480" id="copy-title" style="padding:0 0 12px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; color:#231f20; line-height:1.4;">Title</td></tr>
+        <tr><td width="480" style="padding:0 0 1px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:700; color:#231f20; line-height:1.4;">Hale Design</td></tr>
+        <tr><td width="480" style="padding:0 0 10px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; font-style:italic; color:#231f20; line-height:1.4;">Strategic. Iconic. Inspired.</td></tr>
+        <tr><td width="480" id="copy-phone" style="padding:0 0 2px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;">555-000-0000</td></tr>
         <tr>
           <td width="480" style="padding:0 0 4px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;">
             <a id="copy-email-link" href="#" style="font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; text-decoration:none;">you&#64;hellohaledesign.com</a>
           </td>
         </tr>
-        <!-- ARROW + URL: image and text inside single <a> tag — cannot be split by Apple Mail -->
+        <!-- ARROW + URL: float:left matches original working v1 technique -->
         <tr>
           <td width="480" style="padding:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;">
-            <a href="https://www.hellohaledesign.com" style="font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; text-decoration:none; white-space:nowrap;"><img src="https://static.wixstatic.com/media/5cb9e8_3645b969b0814b7eb71619f6def4c3b6~mv2.png" alt="" width="12" height="12" style="display:inline; vertical-align:middle; border:0; width:12px; height:12px; margin-right:4px;">hellohaledesign.com</a>
+            <img src="https://static.wixstatic.com/media/5cb9e8_3645b969b0814b7eb71619f6def4c3b6~mv2.png" alt="" width="12" height="12" style="float:left; border:0; width:12px; height:12px; padding-right:4px; padding-top:1px;"><a href="https://www.hellohaledesign.com" style="font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; text-decoration:none;">hellohaledesign.com</a>
           </td>
         </tr>
-        <!-- LOGO -->
         <tr>
           <td width="480" style="padding:0;">
             <a href="https://www.hellohaledesign.com" target="_blank">
@@ -420,17 +156,17 @@
   var inputEmail    = document.getElementById('input-email');
   var inputPhone    = document.getElementById('input-phone');
 
-  var prevName         = document.getElementById('prev-name');
-  var prevPronouns     = document.getElementById('prev-pronouns');
-  var prevTitle        = document.getElementById('prev-title');
-  var prevEmailLink    = document.getElementById('prev-email-link');
-  var prevPhone        = document.getElementById('prev-phone');
+  var prevName      = document.getElementById('prev-name');
+  var prevPronouns  = document.getElementById('prev-pronouns');
+  var prevTitle     = document.getElementById('prev-title');
+  var prevEmailLink = document.getElementById('prev-email-link');
+  var prevPhone     = document.getElementById('prev-phone');
 
-  var copyName         = document.getElementById('copy-name');
-  var copyPronouns     = document.getElementById('copy-pronouns');
-  var copyTitle        = document.getElementById('copy-title');
-  var copyEmailLink    = document.getElementById('copy-email-link');
-  var copyPhone        = document.getElementById('copy-phone');
+  var copyName      = document.getElementById('copy-name');
+  var copyPronouns  = document.getElementById('copy-pronouns');
+  var copyTitle     = document.getElementById('copy-title');
+  var copyEmailLink = document.getElementById('copy-email-link');
+  var copyPhone     = document.getElementById('copy-phone');
 
   function updateSignature() {
     var name     = inputName.value     || 'First Last';
@@ -441,18 +177,14 @@
 
     prevName.textContent = name;
     copyName.textContent = name;
-
     prevPronouns.textContent = pronouns;
     copyPronouns.textContent = pronouns;
-
     prevTitle.textContent = title;
     copyTitle.textContent = title;
-
     prevEmailLink.textContent = email;
     prevEmailLink.setAttribute('href', 'mailto:' + email);
     copyEmailLink.textContent = email;
     copyEmailLink.setAttribute('href', 'mailto:' + email);
-
     prevPhone.textContent = phone;
     copyPhone.textContent = phone;
   }
@@ -478,12 +210,7 @@
     sel.addRange(range);
 
     var success = false;
-    try {
-      success = document.execCommand('copy');
-    } catch (e) {
-      success = false;
-    }
-
+    try { success = document.execCommand('copy'); } catch (e) { success = false; }
     sel.removeAllRanges();
 
     if (success) {
@@ -491,24 +218,15 @@
       btn.classList.add('copied');
       statusBar.textContent = 'Signature copied \u2014 paste it into your email settings now.';
       statusBar.className = 'status-bar show success';
-      setTimeout(function() {
-        btn.textContent = 'Copy Signature';
-        btn.classList.remove('copied');
-        statusBar.className = 'status-bar';
-      }, 4000);
+      setTimeout(function() { btn.textContent = 'Copy Signature'; btn.classList.remove('copied'); statusBar.className = 'status-bar'; }, 4000);
     } else {
       btn.textContent = 'Try manually \u2014 see note below';
       btn.classList.add('error');
       statusBar.textContent = 'Auto-copy failed. Click inside the preview above, press Ctrl+A (or \u2318A), then Copy.';
       statusBar.className = 'status-bar show fail';
-      setTimeout(function() {
-        btn.textContent = 'Copy Signature';
-        btn.classList.remove('error');
-        statusBar.className = 'status-bar';
-      }, 6000);
+      setTimeout(function() { btn.textContent = 'Copy Signature'; btn.classList.remove('error'); statusBar.className = 'status-bar'; }, 6000);
     }
   }
 </script>
-
 </body>
 </html>
