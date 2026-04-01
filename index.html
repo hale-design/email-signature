@@ -29,6 +29,13 @@
   .copy-btn.copied { background: #2a7a4b; transform: scale(1); box-shadow: 0 2px 8px rgba(42,122,75,0.35); }
   .copy-btn.error { background: #c0392b; }
   .helper-note { font-size: 11.5px; color: #aaa; text-align: center; margin-top: 12px; line-height: 1.5; }
+  .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+  .btn-row .copy-btn { margin-top: 0; }
+  .copy-btn-mobile { display: block; width: 100%; padding: 14px; background: #fff; color: #231f20; border: 2px solid #231f20; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; letter-spacing: 0.2px; transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease; box-shadow: 0 2px 6px rgba(0,0,0,0.08); user-select: none; -webkit-user-select: none; }
+  .copy-btn-mobile:hover { background: #f5f5f5; }
+  .copy-btn-mobile:active, .copy-btn-mobile.pressing { transform: scale(0.975) translateY(1px); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .copy-btn-mobile.copied { background: #edfaf2; color: #1e6e3e; border-color: #2a7a4b; }
+  .copy-btn-mobile.error { background: #fff0ef; color: #c0392b; border-color: #c0392b; }
   .status-bar { height: 0; overflow: hidden; text-align: center; font-size: 12px; font-weight: 600; letter-spacing: 0.2px; transition: height 0.2s ease, opacity 0.2s ease; opacity: 0; margin-top: 0; border-radius: 6px; }
   .status-bar.show { height: 36px; line-height: 36px; opacity: 1; margin-top: 10px; }
   .status-bar.success { background: #edfaf2; color: #1e6e3e; }
@@ -68,7 +75,7 @@
 
     <!-- VISIBLE PREVIEW — relative paths are fine for browser display -->
     <div id="signature-preview">
-      <table cellpadding="0" cellspacing="0" border="0" width="480" style="border-collapse:collapse; font-family:Arial,Helvetica,sans-serif; font-size:12px; width:480px; -webkit-text-size-adjust:none; text-size-adjust:none;">
+      <table cellpadding="0" cellspacing="0" border="0" width="480" style="border-collapse:collapse; font-family:Arial,Helvetica,sans-serif; font-size:12px; width:480px;">
         <tr>
           <td width="480" style="padding:0 0 8px 0;">
             <div style="display:block; margin:0 0 0 -2px; padding:0; background-image:radial-gradient(circle, #231f20 2px, transparent 2px); background-size:10px 4px; background-repeat:repeat-x; height:4px; width:180px; font-size:0; line-height:0;">&nbsp;</div>
@@ -106,9 +113,12 @@
     <!-- OFFSCREEN COPY SOURCE — populated by JS with absolute URLs at copy time -->
     <div id="sig-copy-source" aria-hidden="true"></div>
 
-    <button class="copy-btn" id="copy-btn" onclick="copySignature()">Copy Signature</button>
+    <div class="btn-row">
+      <button class="copy-btn" id="copy-btn" onclick="copySignature()">Copy Signature</button>
+      <button class="copy-btn-mobile" id="copy-btn-mobile" onclick="copyMobileSignature()">Copy for iPhone Mail</button>
+    </div>
     <div class="status-bar" id="status-bar"></div>
-    <p class="helper-note">Paste directly into your email client's signature settings.</p>
+    <p class="helper-note">Use <strong>Copy Signature</strong> for desktop &amp; Gmail &bull; Use <strong>Copy for iPhone Mail</strong> for Apple Mail on iPhone</p>
   </div>
 
 </div>
@@ -163,7 +173,7 @@
       ? '<td style="padding:0 0 0 6px; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; color:#231f20; line-height:1.3; vertical-align:bottom; white-space:nowrap;">' + pronouns + '</td>'
       : '';
 
-    return '<table cellpadding="0" cellspacing="0" border="0" width="480" style="border-collapse:collapse; font-family:Arial,Helvetica,sans-serif; font-size:12px; width:480px; -webkit-text-size-adjust:none; text-size-adjust:none;">'
+    return '<table cellpadding="0" cellspacing="0" border="0" width="480" style="border-collapse:collapse; font-family:Arial,Helvetica,sans-serif; font-size:12px; width:480px;">'
       + '<tr><td width="480" style="padding:0 0 8px 0;"><div style="display:block; margin:0 0 0 -2px; padding:0; background-image:radial-gradient(circle, #231f20 2px, transparent 2px); background-size:10px 4px; background-repeat:repeat-x; height:4px; width:180px; font-size:0; line-height:0;">&nbsp;</div></td></tr>'
       + '<tr><td width="480" style="padding:0 0 1px 0;"><table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td style="padding:0; font-family:Arial,Helvetica,sans-serif; font-size:15px; font-weight:600; color:#231f20; letter-spacing:0.2px; line-height:1.3; white-space:nowrap;">' + name + '</td>' + pronounsHTML + '</tr></table></td></tr>'
       + '<tr><td width="480" style="padding:0 0 12px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; font-weight:400; color:#231f20; line-height:1.4;">' + title + '</td></tr>'
@@ -174,6 +184,56 @@
       + '<tr><td width="480" style="padding:0 0 14px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; line-height:1.4;"><table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr><td style="padding:0; vertical-align:middle; width:17px;"><img src="' + arrowURL + '" alt="" width="12" height="12" style="display:block; border:0; width:12px; height:12px;"></td><td style="padding:0; vertical-align:middle; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20;"><a href="https://www.hellohaledesign.com" style="font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#231f20; text-decoration:none;">hellohaledesign.com</a></td></tr></table></td></tr>'
       + '<tr><td width="480" style="padding:0;"><a href="https://www.hellohaledesign.com" target="_blank"><img src="' + logoURL + '" alt="Hale Design" width="98" height="36" style="display:block; border:0; width:98px; max-width:98px; height:auto; -ms-interpolation-mode:bicubic;"></a></td></tr>'
       + '</table>';
+  }
+
+  function copyMobileSignature() {
+    var btn       = document.getElementById('copy-btn-mobile');
+    var statusBar = document.getElementById('status-bar');
+
+    btn.classList.add('pressing');
+    setTimeout(function() { btn.classList.remove('pressing'); }, 120);
+
+    var name     = inputName.value     || 'First Last';
+    var pronouns = inputPronouns.value || '';
+    var title    = inputTitle.value    || 'Title';
+    var email    = inputEmail.value    || 'you@hellohaledesign.com';
+    var phone    = inputPhone.value    || '555-000-0000';
+
+    var nameLine = name + (pronouns ? '  ' + pronouns : '');
+
+    var plain = nameLine + '\n'
+      + title + '\n'
+      + '\n'
+      + 'Hale Design\n'
+      + 'Strategic. Iconic. Inspired.\n'
+      + phone + '\n'
+      + email + '\n'
+      + 'hellohaledesign.com';
+
+    var textarea = document.createElement('textarea');
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    textarea.value = plain;
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+
+    var success = false;
+    try { success = document.execCommand('copy'); } catch (e) { success = false; }
+    document.body.removeChild(textarea);
+
+    if (success) {
+      btn.textContent = '\u2713 Copied!';
+      btn.classList.add('copied');
+      statusBar.textContent = 'Plain text copied \u2014 paste into iPhone Mail signature settings.';
+      statusBar.className = 'status-bar show success';
+      setTimeout(function() { btn.textContent = 'Copy for iPhone Mail'; btn.classList.remove('copied'); statusBar.className = 'status-bar'; }, 4000);
+    } else {
+      btn.textContent = 'Copy failed';
+      btn.classList.add('error');
+      statusBar.className = 'status-bar show fail';
+      setTimeout(function() { btn.textContent = 'Copy for iPhone Mail'; btn.classList.remove('error'); statusBar.className = 'status-bar'; }, 4000);
+    }
   }
 
   function copySignature() {
