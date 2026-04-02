@@ -113,6 +113,7 @@
 
     <!-- OFFSCREEN COPY SOURCE — populated by JS with absolute URLs at copy time -->
     <div id="sig-copy-source" aria-hidden="true"></div>
+    <div id="sig-mobile-source" aria-hidden="true" style="position:absolute; left:-9999px; top:0;"></div>
 
     <div class="btn-row">
       <button class="copy-btn" id="copy-btn" onclick="copySignature()">Copy Signature</button>
@@ -190,6 +191,7 @@
   function copyMobileSignature() {
     var btn       = document.getElementById('copy-btn-mobile');
     var statusBar = document.getElementById('status-bar');
+    var mobileDiv = document.getElementById('sig-mobile-source');
 
     btn.classList.add('pressing');
     setTimeout(function() { btn.classList.remove('pressing'); }, 120);
@@ -200,33 +202,32 @@
     var email    = inputEmail.value    || 'you@hellohaledesign.com';
     var phone    = inputPhone.value    || '555-000-0000';
 
-    var nameLine = name + (pronouns ? '  ' + pronouns : '');
+    mobileDiv.innerHTML = '<div style="font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#000;">'
+      + '____________<br>'
+      + '<b>' + name + '</b>' + (pronouns ? '&nbsp;&nbsp;' + pronouns : '') + '<br>'
+      + title + '<br>'
+      + '<br>'
+      + '<b>Hale Design</b><br>'
+      + 'Strategic. Iconic. Inspired.<br>'
+      + phone + '<br>'
+      + '<a href="mailto:' + email + '" style="color:#000; text-decoration:none;">' + email + '</a><br>'
+      + '<a href="https://www.hellohaledesign.com" style="color:#000; text-decoration:none;">hellohaledesign.com</a>'
+      + '</div>';
 
-    var plain = nameLine + '\n'
-      + title + '\n'
-      + '\n'
-      + 'Hale Design\n'
-      + 'Strategic. Iconic. Inspired.\n'
-      + phone + '\n'
-      + email + '\n'
-      + 'hellohaledesign.com';
-
-    var textarea = document.createElement('textarea');
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-9999px';
-    textarea.value = plain;
-    document.body.appendChild(textarea);
-    textarea.focus();
-    textarea.select();
+    var range = document.createRange();
+    range.selectNodeContents(mobileDiv);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
 
     var success = false;
     try { success = document.execCommand('copy'); } catch (e) { success = false; }
-    document.body.removeChild(textarea);
+    sel.removeAllRanges();
 
     if (success) {
-      btn.textContent = '\u2713 Copied!';
+      btn.textContent = '✓ Copied!';
       btn.classList.add('copied');
-      statusBar.textContent = 'Plain text copied \u2014 paste into iPhone Mail signature settings.';
+      statusBar.textContent = 'iPhone signature copied — paste into Apple Mail signature settings.';
       statusBar.className = 'status-bar show success';
       setTimeout(function() { btn.textContent = 'Copy for iPhone Mail'; btn.classList.remove('copied'); statusBar.className = 'status-bar'; }, 4000);
     } else {
